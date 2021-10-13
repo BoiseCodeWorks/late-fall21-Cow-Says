@@ -55,7 +55,9 @@ function animalSay(name) {
   let activeAnimal = animals.find(animal => animal.name === name)
   document.getElementById('message').innerText = `The ${activeAnimal.name} Says ${activeAnimal.sound}.`
   document.querySelector('#img').innerHTML = `<img oncontextmenu="noclick()" class="img-fluid rounded" src="${activeAnimal.imgUrl}" alt="animal pic">`
-  document.getElementById('audio').innerHTML = `<audio src="${activeAnimal.soundClip}" autoplay ></audio>`
+  if (activeAnimal.sound) {
+    document.getElementById('audio').innerHTML = `<audio src="${activeAnimal.soundClip}" autoplay ></audio>`
+  }
   setTimeout(() => {
     document.getElementById('audio').innerHTML = ''
   }, 2000)
@@ -65,6 +67,7 @@ function randomAnimal() {
   // pick random elem within array
   // given animals
   // get random index between 0 length of array
+  togglePrimary()
   let randIndex = Math.floor(Math.random() * animals.length)
   let animal = animals[randIndex]
   document.getElementById('img').classList.add('spin')
@@ -72,6 +75,7 @@ function randomAnimal() {
   setTimeout(() => {
     document.getElementById('img').classList.remove('spin')
     document.getElementById('random').disabled = false
+    togglePrimary()
     animalSay(animal.name)
   }, 2000)
 }
@@ -81,4 +85,23 @@ function randomAnimal() {
 
 function noclick() {
   window.event.preventDefault()
+}
+
+
+let primary = true
+function togglePrimary() {
+  if (primary) {
+    document.querySelectorAll('.bg-primary').forEach(e => {
+      console.log(e)
+      e.classList.remove('bg-primary')
+      e.classList.add('bg-danger')
+    })
+    primary = false
+    return
+  }
+  document.querySelectorAll('.bg-danger').forEach(e => {
+    e.classList.remove('bg-danger')
+    e.classList.add('bg-primary')
+  })
+  primary = true
 }
